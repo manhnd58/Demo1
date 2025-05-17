@@ -1,0 +1,1892 @@
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocab English - Học Từ Vựng Tiếng Anh</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="ModalAbout/modal.css">
+  <link rel="stylesheet" href="FlashCards/flashCards.css">
+  <link rel="stylesheet" href="Game/games.css">
+  <link rel="stylesheet" href="additional.css">
+
+  <!-- Add favicon -->
+  <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/000000/dictionary.png">
+  <!-- Add meta description for SEO -->
+  <meta name="description" content="Học từ vựng tiếng Anh hiệu quả với flashcards, trò chơi và lộ trình cá nhân hóa. Nâng cao vốn từ vựng của bạn mỗi ngày.">
+  <style>
+    /* Modal styles for direct embedding */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal.show {
+      display: flex !important;
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+    <nav class="sidebar">
+      <div class="logo">
+        <h2><i class="fas fa-book"></i> <span>Vocab English</span></h2>
+      </div>
+      <ul class="nav-links">
+        <li class="active" data-tab="home" onclick="switchTab('home')"><i class="fas fa-home"></i> Trang Chủ</li>
+
+        <li data-tab="topics" onclick="switchTab('topics')"><i class="fas fa-layer-group"></i> Chủ Đề</li>
+
+        <li data-tab="flashcards" onclick="switchTab('flashcards')"><i class="fas fa-clone"></i> Flashcards</li>
+
+        <li data-tab="quiz" onclick="switchTab('quiz')"><i class="fas fa-question-circle"></i> Quiz</li>
+
+        <li data-tab="games" onclick="switchTab('games')"><i class="fas fa-gamepad"></i> Trò Chơi</li>
+
+        <li data-tab="progress" onclick="switchTab('progress')"><i class="fas fa-chart-line"></i> Tiến Độ</li>
+
+        <li data-tab="schedule" onclick="switchTab('schedule')"><i class="fas fa-calendar-alt"></i> Lịch Học</li>
+        
+        <li data-tab="profile" onclick="switchTab('profile')"><i class="fas fa-user"></i> Hồ Sơ</li>
+      </ul>
+      <div class="user-profile">
+        <i class="fas fa-user-circle"></i>
+        <span>Học Viên</span>
+      </div>
+    </nav>
+
+    <main class="content">
+      <header>
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" id="search" placeholder="Tìm kiếm từ vựng...">
+        </div>
+        <div class="actions">
+          <select id="levelSelect">
+            <option value="beginner">Sơ Cấp</option>
+            <option value="intermediate">Trung Cấp</option>
+            <option value="advanced">Cao Cấp</option>
+          </select>
+          <button id="darkModeToggle" class="dark-mode-toggle" title="Chuyển đổi chế độ sáng/tối">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun" style="display: none;"></i>
+          </button>
+          <div class="header-buttons">
+            <button id="aboutBtn" class="header-btn"><i class="fas fa-info-circle"></i> Giới thiệu</button>
+            <button id="contactBtn" class="header-btn" onclick="openModal('contactModal')"><i class="fas fa-envelope"></i> Liên hệ</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="tab-content">
+        <!-- Trang Chủ -->
+        <section id="home" class="active">
+          <div class="title">
+            <h2>Chào mừng đến với Vocab English!</h2>
+          </div>
+          <div class="dashboard-grid">
+            <div class="stats-card">
+              <div class="stats-header">
+                <h3>Thống Kê Học Tập</h3>
+                <span class="badge">Hôm nay</span>
+              </div>
+              <div class="stats-container">
+                <div class="stat-card">
+                  <i class="fas fa-book"></i>
+                  <h4>Từ đã học</h4>
+                  <p id="learnedWords">0</p>
+                </div>
+                <div class="stat-card">
+                  <i class="fas fa-check-circle"></i>
+                  <h4>Hoàn thành</h4>
+                  <p id="completionRate">0%</p>
+                </div>
+                <div class="stat-card">
+                  <i class="fas fa-calendar-check"></i>
+                  <h4>Streak học tập</h4>
+                  <p id="streak">0 ngày</p>
+                </div>
+                <div class="stat-card">
+                  <i class="fas fa-trophy"></i>
+                  <h4>Điểm số</h4>
+                  <p id="totalScore">0</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="calendar-card">
+              <div class="calendar-header">
+                <h3>Lịch Học</h3>
+                <div class="calendar-nav">
+                  <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                  <span id="currentMonth">Tháng 7, 2025</span>
+                  <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                </div>
+              </div>
+              <div class="calendar-body" id="calendarDays">
+                <!-- Calendar days will be generated by JavaScript -->
+              </div>
+              <div class="calendar-footer">
+                <div class="calendar-legend">
+                  <span class="legend-item"><span class="dot learned"></span> Đã học</span>
+                  <span class="legend-item"><span class="dot planned"></span> Dự kiến</span>
+                  <span class="legend-item"><span class="dot today"></span> Hôm nay</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-flex">
+            <div class="daily-word-section">
+              <div class="section-header">
+                <h3>Từ vựng hôm nay</h3>
+                <button id="refreshWord" title="Làm mới từ vựng"><i class="fas fa-sync-alt"></i></button>
+              </div>
+              <div class="word-card-expanded card">
+                <div class="word-card-header">
+                  <div>
+                    <h4 id="wordOfDay">Vocabulary</h4>
+                    <div class="word-phonetics">
+                      <span id="phonetic">/vəˈkæbjʊləri/</span>
+                      <button id="pronounceWord" title="Phát âm"><i class="fas fa-volume-up"></i></button>
+                    </div>
+                  </div>
+                  <span class="word-category"><i class="fas fa-tag"></i> <span id="wordCategory">General</span></span>
+                </div>
+                <p class="word-meaning" id="meaningOfDay">Từ vựng - tất cả từ mà một người biết hoặc được sử dụng trong một ngôn ngữ cụ thể</p>
+                <p class="word-example" id="exampleOfDay">Học đều đặn sẽ giúp bạn cải thiện vốn từ vựng tiếng Anh.</p>
+                <div class="word-image-container">
+                  <div class="image-placeholder">
+                    <i class="fas fa-image"></i>
+                  </div>
+                  <img id="wordImage" src="https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?ixid=2yJhcHBfaWQiOjEyMDd9&w=750&dpr=1" alt="Word illustration" class="img-fluid loading">
+                </div>
+                <div class="word-actions mt-3">
+                  <button id="markLearned" class="btn btn-success"><i class="fas fa-check"></i> Đánh dấu đã học</button>
+                  <button id="addToReview" class="btn btn-warning"><i class="fas fa-bookmark"></i> Thêm vào ôn tập</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="quick-start-section">
+              <h3>Bắt đầu ngay</h3>
+              <div class="quick-actions">
+                <button id="startLearning" class="btn btn-primary" onclick="switchTab('topics')"><i class="fas fa-play"></i> Học từ mới</button>
+                <button id="dailyChallenge" class="btn btn-success" onclick="startDailyChallenge()"><i class="fas fa-trophy"></i> Thử thách hôm nay</button>
+                <button id="reviewMistakesBtn" class="btn btn-warning" onclick="reviewMistakes()"><i class="fas fa-sync"></i> Ôn tập từ sai</button>
+                <button id="startPractice" class="btn btn-info" onclick="switchTab('flashcards')"><i class="fas fa-dumbbell"></i> Luyện tập</button>
+              </div>
+              
+              <h3 class="mt-4">Học theo chủ đề</h3>
+              <div class="topic-grid">
+                <div class="topic-card card" data-topic="food" onclick="switchTab('topics')">
+                  <div class="topic-icon"><i class="fas fa-utensils"></i></div>
+                  <h4>Thức ăn</h4>
+                  <div class="topic-progress">
+                    <div class="progress-bar" style="width: 65%"></div>
+                  </div>
+                </div>
+                <div class="topic-card card" data-topic="animals" onclick="switchTab('topics')">
+                  <div class="topic-icon"><i class="fas fa-paw"></i></div>
+                  <h4>Động vật</h4>
+                  <div class="topic-progress">
+                    <div class="progress-bar" style="width: 40%"></div>
+                  </div>
+                </div>
+                <div class="topic-card card" data-topic="travel" onclick="switchTab('topics')">
+                  <div class="topic-icon"><i class="fas fa-plane"></i></div>
+                  <h4>Du lịch</h4>
+                  <div class="topic-progress">
+                    <div class="progress-bar" style="width: 20%"></div>
+                  </div>
+                </div>
+                <div class="topic-card card" data-topic="technology" onclick="switchTab('topics')">
+                  <div class="topic-icon"><i class="fas fa-laptop"></i></div>
+                  <h4>Công nghệ</h4>
+                  <div class="topic-progress">
+                    <div class="progress-bar" style="width: 10%"></div>
+                  </div>
+                </div>
+                <div class="topic-card card" data-topic="health" onclick="switchTab('topics')">
+                  <div class="topic-icon"><i class="fas fa-heartbeat"></i></div>
+                  <h4>Sức khỏe</h4>
+                  <div class="topic-progress">
+                    <div class="progress-bar" style="width: 5%"></div>
+                  </div>
+                </div>
+                <div class="topic-card more" id="viewAllTopics" onclick="switchTab('topics')">
+                  <div class="topic-icon"><i class="fas fa-ellipsis-h"></i></div>
+                  <h4>Xem thêm</h4>
+                </div>
+              </div>
+              
+              <!-- Learning Streak -->
+              <div class="streak-mini-card mt-4">
+                <div class="streak-header">
+                  <h3><i class="fas fa-fire"></i> Streak học tập</h3>
+                  <span class="streak-badge">14 ngày</span>
+                </div>
+                <div class="streak-days-mini">
+                  <div class="streak-day active"><span>8</span></div>
+                  <div class="streak-day active"><span>9</span></div>
+                  <div class="streak-day active"><span>10</span></div>
+                  <div class="streak-day active"><span>11</span></div>
+                  <div class="streak-day active"><span>12</span></div>
+                  <div class="streak-day active"><span>13</span></div>
+                  <div class="streak-day today"><span>14</span></div>
+                </div>
+                <p class="streak-message">Học thêm 1 ngày nữa để đạt mốc 15 ngày!</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chủ đề -->
+        <section id="topics">
+          <h2>Học từ vựng theo chủ đề</h2>
+          <div class="topics-grid">
+            <div class="topic-large-card card" data-topic="food">
+              <div class="topic-image">
+                <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Food" class="img-fluid">
+                <div class="topic-overlay">
+                  <h3>Thức ăn & Đồ uống</h3>
+                  <p>30 từ vựng</p>
+                </div>
+              </div>
+              <div class="topic-details">
+                <div class="topic-stat">
+                  <i class="fas fa-check-circle"></i>
+                  <span>12/30 từ</span>
+                </div>
+                <button class="btn btn-primary">Học ngay</button>
+              </div>
+            </div>
+            <div class="topic-large-card card" data-topic="animals">
+              <div class="topic-image">
+                <img src="https://images.unsplash.com/photo-1425082661705-1834bfd09dca?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Animals" class="img-fluid">
+                <div class="topic-overlay">
+                  <h3>Động vật</h3>
+                  <p>25 từ vựng</p>
+                </div>
+              </div>
+              <div class="topic-details">
+                <div class="topic-stat">
+                  <i class="fas fa-check-circle"></i>
+                  <span>8/25 từ</span>
+                </div>
+                <button class="btn btn-primary">Học ngay</button>
+              </div>
+            </div>
+            <div class="topic-large-card card" data-topic="travel">
+              <div class="topic-image">
+                <img src="https://iit.com.vn/files/images/Article/5-dieu-can-biet-khi-thiet-ke-website-du-lich.jpg" alt="Travel" class="img-fluid">
+                <div class="topic-overlay">
+                  <h3>Du lịch</h3>
+                  <p>40 từ vựng</p>
+                </div>
+              </div>
+              <div class="topic-details">
+                <div class="topic-stat">
+                  <i class="fas fa-check-circle"></i>
+                  <span>5/40 từ</span>
+                </div>
+                <button class="btn btn-primary">Học ngay</button>
+              </div>
+            </div>
+            <div class="topic-large-card card" data-topic="technology">
+              <div class="topic-image">
+                <img src="https://huongnghiep.hocmai.vn/wp-content/uploads/2022/01/1-121.png" alt="Technology" class="img-fluid">
+                <div class="topic-overlay">
+                  <h3>Công nghệ</h3>
+                  <p>35 từ vựng</p>
+                </div>
+              </div>
+              <div class="topic-details">
+                <div class="topic-stat">
+                  <i class="fas fa-check-circle"></i>
+                  <span>2/35 từ</span>
+                </div>
+                <button class="btn btn-primary">Học ngay</button>
+              </div>
+            </div>
+            <div class="topic-large-card card" data-topic="health">
+              <div class="topic-image">
+                <img src="https://images.unsplash.com/photo-1505576399279-565b52d4ac71?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Health" class="img-fluid">
+                <div class="topic-overlay">
+                  <h3>Sức khỏe</h3>
+                  <p>28 từ vựng</p>
+                </div>
+              </div>
+              <div class="topic-details">
+                <div class="topic-stat">
+                  <i class="fas fa-check-circle"></i>
+                  <span>0/28 từ</span>
+                </div>
+                <button class="btn btn-primary">Học ngay</button>
+              </div>
+            </div>
+            <div class="topic-large-card card" data-topic="education">
+              <div class="topic-image">
+                <img src="https://th.bing.com/th/id/OIP.oFWD5EN627ht8x5j9mAddQHaEb?cb=iwp2&rs=1&pid=ImgDetMain" alt="Education" class="img-fluid">
+                <div class="topic-overlay">
+                  <h3>Giáo dục</h3>
+                  <p>32 từ vựng</p>
+                </div>
+              </div>
+              <div class="topic-details">
+                <div class="topic-stat">
+                  <i class="fas fa-check-circle"></i>
+                  <span>0/32 từ</span>
+                </div>
+                <button class="btn btn-primary">Học ngay</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Flashcards -->
+        <section id="flashcards">
+          <div id="flashcards-content-placeholder"></div>
+        </section>
+        
+        <!-- Quiz -->
+        <section id="quiz">
+          <h2>Kiểm Tra Kiến Thức</h2>
+          
+          <div class="quiz-settings" id="quizSettings">
+            <h3>Cài đặt Quiz</h3>
+            <div class="settings-container">
+              <div class="setting-group">
+                <label>Loại câu hỏi:</label>
+                <div class="checkbox-group">
+                  <label class="checkbox"><input type="checkbox" name="quizType" value="multiChoice" checked> <span>Trắc nghiệm</span></label>
+                  <label class="checkbox"><input type="checkbox" name="quizType" value="fillBlank"> <span>Điền vào chỗ trống</span></label>
+                  <label class="checkbox"><input type="checkbox" name="quizType" value="listening"> <span>Nghe và chọn từ</span></label>
+                  <label class="checkbox"><input type="checkbox" name="quizType" value="matching"> <span>Nối từ với nghĩa</span></label>
+                  <label class="checkbox"><input type="checkbox" name="quizType" value="arrange"> <span>Sắp xếp từ</span></label>
+                </div>
+              </div>
+              
+              <div class="setting-group">
+                <label>Chủ đề:</label>
+                <select id="quizTopic">
+                  <option value="all">Tất cả</option>
+                  <option value="food">Thức ăn</option>
+                  <option value="animals">Động vật</option>
+                  <option value="travel">Du lịch</option>
+                  <option value="technology">Công nghệ</option>
+                  <option value="health">Sức khỏe</option>
+                  <option value="education">Giáo dục</option>
+                </select>
+              </div>
+              
+              <div class="setting-group">
+                <label>Số lượng câu hỏi: <span id="questionCountDisplay">10</span></label>
+                <div class="range-slider">
+                  <input type="range" min="5" max="30" value="10" id="questionCount">
+                </div>
+              </div>
+              
+              <div class="setting-group">
+                <label>Thời gian làm bài:</label>
+                <select id="quizTime">
+                  <option value="0">Không giới hạn</option>
+                  <option value="60">1 phút</option>
+                  <option value="120">2 phút</option>
+                  <option value="300">5 phút</option>
+                  <option value="600">10 phút</option>
+                </select>
+              </div>
+            </div>
+            
+            <button id="startQuizBtn" class="btn btn-primary"><i class="fas fa-play"></i> Bắt Đầu Quiz</button>
+          </div>
+          
+          <div class="quiz-container" id="quizContainer" style="display: none;">
+            <div class="quiz-header">
+              <div class="quiz-progress">
+                <div class="progress-text">
+                  <span id="currentQuestionIndex">1</span>/<span id="totalQuestions">10</span>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-bar" id="quizProgress" style="width: 10%"></div>
+                </div>
+              </div>
+              <div class="quiz-timer" id="quizTimerContainer">
+                <i class="fas fa-clock"></i>
+                <span id="quizTimer">00:00</span>
+              </div>
+              <div class="quiz-score">
+                Điểm: <span id="currentScore">0</span>
+              </div>
+            </div>
+            
+            <!-- Multiple Choice Question -->
+            <div class="question-container" id="multiChoiceQuestion">
+              <div class="question-header">
+                <span class="question-type">Trắc nghiệm</span>
+                <h3 id="questionText">Đâu là nghĩa của từ "example"?</h3>
+                <button class="pronounce-btn" id="pronounceQuestion"><i class="fas fa-volume-up"></i></button>
+              </div>
+              <div class="options-container" id="optionsContainer">
+                <div class="quiz-option">Ví dụ</div>
+                <div class="quiz-option">Mẫu vật</div>
+                <div class="quiz-option">Kiểu mẫu</div>
+                <div class="quiz-option">Trải nghiệm</div>
+              </div>
+            </div>
+            
+            <!-- Fill in the Blank Question -->
+            <div class="question-container" id="fillBlankQuestion" style="display: none;">
+              <div class="question-header">
+                <span class="question-type">Điền vào chỗ trống</span>
+                <h3>Hoàn thành câu sau với từ thích hợp:</h3>
+              </div>
+              <div class="fill-blank-container">
+                <p id="fillBlankText">She likes to eat an ___ every day.</p>
+                <div class="answer-input">
+                  <input type="text" id="blankAnswer" placeholder="Nhập từ...">
+                </div>
+              </div>
+            </div>
+            
+            <!-- Listening Question -->
+            <div class="question-container" id="listeningQuestion" style="display: none;">
+              <div class="question-header">
+                <span class="question-type">Nghe và chọn từ</span>
+                <h3>Nghe và chọn từ đúng:</h3>
+              </div>
+              <div class="listening-container">
+                <button class="play-audio-btn" id="playAudio"><i class="fas fa-play"></i> Phát âm thanh</button>
+                <div class="options-container" id="listeningOptions">
+                  <!-- Options will be generated by JavaScript -->
+                </div>
+              </div>
+            </div>
+            
+            <!-- Matching Question -->
+            <div class="question-container" id="matchingQuestion" style="display: none;">
+              <div class="question-header">
+                <span class="question-type">Nối từ với nghĩa</span>
+                <h3>Nối mỗi từ với nghĩa tương ứng:</h3>
+              </div>
+              <div class="matching-container">
+                <div class="matching-columns">
+                  <div class="matching-column" id="matchWords">
+                    <!-- Words will be generated by JavaScript -->
+                  </div>
+                  <div class="matching-column" id="matchMeanings">
+                    <!-- Meanings will be generated by JavaScript -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Word Arrangement Question -->
+            <div class="question-container" id="arrangementQuestion" style="display: none;">
+              <div class="question-header">
+                <span class="question-type">Sắp xếp từ</span>
+                <h3>Sắp xếp các từ để tạo câu đúng:</h3>
+              </div>
+              <div class="arrangement-container">
+                <div class="word-pieces" id="wordPieces">
+                  <!-- Word pieces will be generated by JavaScript -->
+                </div>
+                <div class="arranged-sentence" id="arrangedSentence">
+                  <!-- The sentence being built -->
+                </div>
+              </div>
+            </div>
+
+
+            <div class="result-actions">
+              <button id="retakeQuiz" class="btn-primary">Làm Lại</button>
+              <button id="reviewWords" class="btn-secondary">Ôn Tập Từ Sai</button>
+              <button id="returnToSettings" class="btn-tertiary">Quay Lại Cài Đặt</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Trò chơi -->
+        <section id="games">
+          <div id="games-content-placeholder"></div>
+        </section>
+
+        <!-- Tiến Độ -->
+        <section id="progress">
+          <h2>Theo Dõi Tiến Độ</h2>
+          
+          <div class="progress-header">
+            <div class="progress-summary-cards">
+              <div class="progress-summary-card">
+                <div class="summary-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <div class="summary-info">
+                  <h3 id="totalWords">250</h3>
+                  <p>Từ vựng đã học</p>
+                </div>
+                <div class="summary-progress">
+                  <div class="progress-ring">
+                    <svg width="60" height="60">
+                      <circle class="progress-ring-circle-bg" cx="30" cy="30" r="24"></circle>
+                      <circle class="progress-ring-circle" cx="30" cy="30" r="24" data-percent="25"></circle>
+                    </svg>
+                    <span class="progress-text">25%</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="progress-summary-card">
+                <div class="summary-icon">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="summary-info">
+                  <h3 id="correctRate">85%</h3>
+                  <p>Tỷ lệ trả lời đúng</p>
+                </div>
+                <div class="summary-progress">
+                  <div class="progress-ring">
+                    <svg width="60" height="60">
+                      <circle class="progress-ring-circle-bg" cx="30" cy="30" r="24"></circle>
+                      <circle class="progress-ring-circle" cx="30" cy="30" r="24" data-percent="85"></circle>
+                    </svg>
+                    <span class="progress-text">85%</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="progress-summary-card">
+                <div class="summary-icon">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <div class="summary-info">
+                  <h3 id="studyTime">45</h3>
+                  <p>Phút học tập/ngày</p>
+                </div>
+                <div class="summary-progress">
+                  <div class="progress-ring">
+                    <svg width="60" height="60">
+                      <circle class="progress-ring-circle-bg" cx="30" cy="30" r="24"></circle>
+                      <circle class="progress-ring-circle" cx="30" cy="30" r="24" data-percent="75"></circle>
+                    </svg>
+                    <span class="progress-text">75%</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="progress-summary-card">
+                <div class="summary-icon">
+                  <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="summary-info">
+                  <h3 id="streakCount">14</h3>
+                  <p>Ngày học liên tiếp</p>
+                </div>
+                <div class="summary-progress">
+                  <div class="progress-ring">
+                    <svg width="60" height="60">
+                      <circle class="progress-ring-circle-bg" cx="30" cy="30" r="24"></circle>
+                      <circle class="progress-ring-circle" cx="30" cy="30" r="24" data-percent="70"></circle>
+                    </svg>
+                    <span class="progress-text">70%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="stats-overview">
+            <div class="stat-overview-card">
+              <div class="stat-header">
+                <h3><i class="fas fa-chart-line"></i> Tổng Quan</h3>
+                <div class="time-filter">
+                  <button class="active" data-period="week">7 ngày</button>
+                  <button data-period="month">30 ngày</button>
+                  <button data-period="all">Tất cả</button>
+                </div>
+              </div>
+              <div class="stat-body">
+                <div class="progress-charts">
+                  <div class="chart-container">
+                    <div class="chart-header">
+                      <h4>Từ vựng đã học</h4>
+                      <div class="chart-legend">
+                        <span class="legend-item"><span class="legend-color" style="background-color: var(--primary-color);"></span> Từ mới</span>
+                        <span class="legend-item"><span class="legend-color" style="background-color: var(--secondary-color);"></span> Ôn tập</span>
+                      </div>
+                    </div>
+                    <canvas id="learningChart"></canvas>
+                  </div>
+                  <div class="chart-container">
+                    <div class="chart-header">
+                      <h4>Thời gian học tập</h4>
+                      <div class="chart-legend">
+                        <span class="legend-item"><span class="legend-color" style="background-color: var(--accent-color);"></span> Phút/ngày</span>
+                      </div>
+                    </div>
+                    <canvas id="activityChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="progress-details">
+            <div class="progress-row">
+              <div class="topic-progress-card">
+                <div class="topic-progress-header">
+                  <h3><i class="fas fa-layer-group"></i> Tiến độ theo chủ đề</h3>
+                  <select id="topicProgressFilter">
+                    <option value="all">Tất cả chủ đề</option>
+                    <option value="inprogress">Đang học</option>
+                    <option value="completed">Đã hoàn thành</option>
+                    <option value="notstarted">Chưa bắt đầu</option>
+                  </select>
+                </div>
+                <div class="topic-progress-list">
+                  <div class="topic-progress-item">
+                    <div class="topic-info">
+                      <div class="topic-icon"><i class="fas fa-utensils"></i></div>
+                      <div class="topic-details">
+                        <h4>Thức ăn & Đồ uống</h4>
+                        <div class="topic-stats">
+                          <span>25/30 từ</span>
+                          <span class="topic-completion">83%</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="topic-progress-bar">
+                      <div class="progress-bar" style="width: 83%"></div>
+                    </div>
+                  </div>
+                  <div class="topic-progress-item">
+                    <div class="topic-info">
+                      <div class="topic-icon"><i class="fas fa-paw"></i></div>
+                      <div class="topic-details">
+                        <h4>Động vật</h4>
+                        <div class="topic-stats">
+                          <span>15/25 từ</span>
+                          <span class="topic-completion">60%</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="topic-progress-bar">
+                      <div class="progress-bar" style="width: 60%"></div>
+                    </div>
+                  </div>
+                  <div class="topic-progress-item">
+                    <div class="topic-info">
+                      <div class="topic-icon"><i class="fas fa-plane"></i></div>
+                      <div class="topic-details">
+                        <h4>Du lịch</h4>
+                        <div class="topic-stats">
+                          <span>18/40 từ</span>
+                          <span class="topic-completion">45%</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="topic-progress-bar">
+                      <div class="progress-bar" style="width: 45%"></div>
+                    </div>
+                  </div>
+                  <div class="topic-progress-item">
+                    <div class="topic-info">
+                      <div class="topic-icon"><i class="fas fa-laptop"></i></div>
+                      <div class="topic-details">
+                        <h4>Công nghệ</h4>
+                        <div class="topic-stats">
+                          <span>5/35 từ</span>
+                          <span class="topic-completion">14%</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="topic-progress-bar">
+                      <div class="progress-bar" style="width: 14%"></div>
+                    </div>
+                  </div>
+                  <div class="topic-progress-item">
+                    <div class="topic-info">
+                      <div class="topic-icon"><i class="fas fa-heartbeat"></i></div>
+                      <div class="topic-details">
+                        <h4>Sức khỏe</h4>
+                        <div class="topic-stats">
+                          <span>0/28 từ</span>
+                          <span class="topic-completion">0%</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="topic-progress-bar">
+                      <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="achievement-container">
+                <div class="achievement-header">
+                  <h3><i class="fas fa-trophy"></i> Thành Tích</h3>
+                  <button class="achievements-toggle">Xem tất cả <i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="achievements" id="achievements">
+                  <div class="achievement">
+                    <div class="achievement-icon">
+                      <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="achievement-info">
+                      <h4>Người học chăm chỉ</h4>
+                      <p>Học 7 ngày liên tiếp</p>
+                      <div class="achievement-progress">
+                        <div class="progress-bar" style="width: 100%"></div>
+                        <span>Hoàn thành</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="achievement">
+                    <div class="achievement-icon">
+                      <i class="fas fa-book"></i>
+                    </div>
+                    <div class="achievement-info">
+                      <h4>Thư viện từ vựng</h4>
+                      <p>Học 100 từ mới</p>
+                      <div class="achievement-progress">
+                        <div class="progress-bar" style="width: 65%"></div>
+                        <span>65/100</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="achievement locked">
+                    <div class="achievement-icon">
+                      <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="achievement-info">
+                      <h4>Chuyên gia trắc nghiệm</h4>
+                      <p>Hoàn thành 10 bài kiểm tra với điểm số trên 80%</p>
+                      <div class="achievement-progress">
+                        <div class="progress-bar" style="width: 40%"></div>
+                        <span>4/10</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="learning-history">
+            <div class="history-header">
+              <h3><i class="fas fa-history"></i> Lịch sử học tập</h3>
+              <div class="history-filters">
+                <div class="search-filter">
+                  <i class="fas fa-search"></i>
+                  <input type="text" placeholder="Tìm kiếm từ..." id="historySearch">
+                </div>
+                <select id="historyFilter">
+                  <option value="all">Tất cả hoạt động</option>
+                  <option value="learned">Từ đã học</option>
+                  <option value="quiz">Bài kiểm tra</option>
+                  <option value="practice">Luyện tập</option>
+                  <option value="game">Trò chơi</option>
+                </select>
+              </div>
+            </div>
+            <div class="history-timeline" id="historyTimeline">
+              <!-- Timeline entries sẽ được tạo bởi JavaScript -->
+              <div class="timeline-day">
+                <div class="date-marker">
+                  <span>Hôm nay</span>
+                </div>
+                <div class="timeline-entries">
+                  <div class="timeline-entry animate-in">
+                    <div class="entry-time">10:30</div>
+                    <div class="entry-content">
+                      <div class="entry-icon"><i class="fas fa-book"></i></div>
+                      <div class="entry-details">
+                        <h4>Đã học từ mới</h4>
+                        <div class="word-tags">
+                          <span class="word-tag">apple</span>
+                          <span class="word-tag">banana</span>
+                          <span class="word-tag">cat</span>
+                          <span class="word-tag">dog</span>
+                          <span class="word-tag">elephant</span>
+                        </div>
+                      </div>
+                      <div class="entry-actions">
+                        <button class="btn-sm btn-outline"><i class="fas fa-sync"></i> Ôn tập</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="timeline-entry animate-in" style="animation-delay: 0.1s;">
+                    <div class="entry-time">11:15</div>
+                    <div class="entry-content">
+                      <div class="entry-icon"><i class="fas fa-trophy"></i></div>
+                      <div class="entry-details">
+                        <h4>Hoàn thành bài kiểm tra</h4>
+                        <div class="entry-stats">
+                          <span class="entry-stat"><i class="fas fa-check"></i> 8/10 câu đúng</span>
+                          <span class="entry-stat"><i class="fas fa-clock"></i> 5 phút</span>
+                          <span class="entry-stat"><i class="fas fa-star"></i> 80 điểm</span>
+                        </div>
+                      </div>
+                      <div class="entry-actions">
+                        <button class="btn-sm btn-outline"><i class="fas fa-redo"></i> Làm lại</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-day">
+                <div class="date-marker">
+                  <span>Hôm qua</span>
+                </div>
+                <div class="timeline-entries">
+                  <div class="timeline-entry animate-in" style="animation-delay: 0.2s;">
+                    <div class="entry-time">14:45</div>
+                    <div class="entry-content">
+                      <div class="entry-icon"><i class="fas fa-gamepad"></i></div>
+                      <div class="entry-details">
+                        <h4>Chơi Hangman</h4>
+                        <div class="entry-stats">
+                          <span class="entry-stat"><i class="fas fa-trophy"></i> 120 điểm</span>
+                          <span class="entry-stat"><i class="fas fa-stopwatch"></i> 8 phút</span>
+                          <span class="entry-stat"><i class="fas fa-check-circle"></i> 6 từ đúng</span>
+                        </div>
+                      </div>
+                      <div class="entry-actions">
+                        <button class="btn-sm btn-outline"><i class="fas fa-play"></i> Chơi lại</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-loadmore">
+                <button class="btn-outline"><i class="fas fa-plus"></i> Xem thêm</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="learning-recommendations">
+            <h3><i class="fas fa-lightbulb"></i> Đề xuất cá nhân hóa</h3>
+            <div class="recommendations-container">
+              <div class="recommendation-card">
+                <div class="recommendation-icon"><i class="fas fa-sync"></i></div>
+                <div class="recommendation-content">
+                  <h4>Ôn tập từ vựng cần thiết</h4>
+                  <p>Có 15 từ bạn cần ôn tập lại để tránh quên</p>
+                  <button class="btn-sm btn-primary">Ôn tập ngay</button>
+                </div>
+              </div>
+              <div class="recommendation-card">
+                <div class="recommendation-icon"><i class="fas fa-trophy"></i></div>
+                <div class="recommendation-content">
+                  <h4>Cơ hội đạt thành tích</h4>
+                  <p>Bạn chỉ cần 3 ngày học nữa để đạt thành tích "Streak 10 ngày"</p>
+                  <button class="btn-sm btn-primary">Xem thành tích</button>
+                </div>
+              </div>
+              <div class="recommendation-card">
+                <div class="recommendation-icon"><i class="fas fa-book"></i></div>
+                <div class="recommendation-content">
+                  <h4>Hoàn thành chủ đề Thức ăn</h4>
+                  <p>Bạn chỉ còn 5 từ nữa để hoàn thành chủ đề này</p>
+                  <button class="btn-sm btn-primary">Tiếp tục học</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Lịch Học -->
+                <!-- Lịch Học -->
+<section id="schedule" class="tab-content">
+  <h2>Lịch Học Của Bạn</h2>
+  <div class="schedule-container">
+    <!-- Monthly Calendar -->
+    <div class="calendar-card">
+      <div class="calendar-header">
+        <h3 id="currentMonth">Tháng 8, 2023</h3>
+        <div class="calendar-nav">
+          <button aria-label="Previous Month"><i class="fas fa-chevron-left"></i></button>
+          <button aria-label="Next Month"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+      <div class="calendar-body-wrapper">
+        <div class="calendar-body">
+          <div class="calendar-day header">CN</div>
+          <div class="calendar-day header">T2</div>
+          <div class="calendar-day header">T3</div>
+          <div class="calendar-day header">T4</div>
+          <div class="calendar-day header">T5</div>
+          <div class="calendar-day header">T6</div>
+          <div class="calendar-day header">T7</div>
+          <!-- Example days -->
+          <div class="calendar-day"></div>
+          <div class="calendar-day"></div>
+          <div class="calendar-day">1</div>
+          <div class="calendar-day">2</div>
+          <div class="calendar-day">3</div>
+          <div class="calendar-day has-events">4</div>
+          <div class="calendar-day">5</div>
+          <div class="calendar-day">6</div>
+          <div class="calendar-day">7</div>
+          <div class="calendar-day today has-events">8</div>
+          <div class="calendar-day">9</div>
+          <div class="calendar-day">10</div>
+          <div class="calendar-day has-events">11</div>
+          <div class="calendar-day">12</div>
+          <div class="calendar-day">13</div>
+          <div class="calendar-day">14</div>
+          <div class="calendar-day">15</div>
+          <div class="calendar-day">16</div>
+          <div class="calendar-day">17</div>
+          <div class="calendar-day">18</div>
+          <div class="calendar-day">19</div>
+          <div class="calendar-day">20</div>
+          <div class="calendar-day">21</div>
+          <div class="calendar-day">22</div>
+          <div class="calendar-day">23</div>
+          <div class="calendar-day">24</div>
+          <div class="calendar-day">25</div>
+          <div class="calendar-day">26</div>
+          <div class="calendar-day">27</div>
+          <div class="calendar-day">28</div>
+          <div class="calendar-day">29</div>
+          <div class="calendar-day">30</div>
+          <div class="calendar-day">31</div>
+        </div>
+      </div>
+      <div class="calendar-footer">
+        <div class="calendar-legend">
+          <div class="legend-item"><span class="dot learned"></span> Đã học</div>
+          <div class="legend-item"><span class="dot planned"></span> Dự kiến</div>
+          <div class="legend-item"><span class="dot today"></span> Hôm nay</div>
+        </div>
+      </div>
+      <div class="calendar-actions">
+        <button class="btn-primary" style="opacity: 0.6; cursor: not-allowed;" disabled>Thêm Hoạt Động</button>
+      </div>
+    </div>
+
+    <!-- Daily Timeline -->
+    <div class="timeline-card">
+      <div class="timeline-header">
+        <h3>Thứ Ba, 8 tháng 8, 2023 <span class="badge today-badge">Hôm nay</span></h3>
+      </div>
+      <div class="schedule-timeline-wrapper">
+        <div class="schedule-timeline">
+          <div class="timeline-hours">
+            <div class="timeline-hour">6:00</div>
+            <div class="timeline-hour">7:00</div>
+            <div class="timeline-hour">8:00</div>
+            <div class="timeline-hour">9:00</div>
+            <div class="timeline-hour">10:00</div>
+            <div class="timeline-hour">11:00</div>
+            <div class="timeline-hour">12:00</div>
+            <div class="timeline-hour">13:00</div>
+            <div class="timeline-hour">14:00</div>
+            <div class="timeline-hour">15:00</div>
+            <div class="timeline-hour">16:00</div>
+            <div class="timeline-hour">17:00</div>
+            <div class="timeline-hour">18:00</div>
+            <div class="timeline-hour">19:00</div>
+            <div class="timeline-hour">20:00</div>
+            <div class="timeline-hour">21:00</div>
+            <div class="timeline-hour">22:00</div>
+          </div>
+          <!-- Example Events -->
+          <div class="schedule-event learning" style="top: 60px; height: 60px;">
+            <div class="event-content">
+              <div class="event-header">
+                <h4>Học từ mới - Thức ăn</h4>
+                <span class="event-time">8:00 - 9:00</span>
+              </div>
+              <p class="event-description">Học 10 từ vựng về chủ đề Thức ăn</p>
+              <div class="event-actions">
+                <button class="edit-event" aria-label="Edit Event"><i class="fas fa-edit"></i></button>
+                <button class="delete-event" aria-label="Delete Event"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="schedule-event review" style="top: 180px; height: 60px;">
+            <div class="event-content">
+              <div class="event-header">
+                <h4>Ôn tập - Động vật</h4>
+                <span class="event-time">10:00 - 11:00</span>
+              </div>
+              <p class="event-description">Ôn lại 15 từ vựng về Động vật</p>
+              <div class="event-actions">
+                <button class="edit-event" aria-label="Edit Event"><i class="fas fa-edit"></i></button>
+                <button class="delete-event" aria-label="Delete Event"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+          <!-- Adding more events to demonstrate scrolling -->
+          <div class="schedule-event quiz" style="top: 300px; height: 60px;">
+            <div class="event-content">
+              <div class="event-header">
+                <h4>Làm Quiz - Du lịch</h4>
+                <span class="event-time">12:00 - 12:30</span>
+              </div>
+              <p class="event-description">Làm bài kiểm tra 10 câu về Du lịch</p>
+              <div class="event-actions">
+                <button class="edit-event" aria-label="Edit Event"><i class="fas fa-edit"></i></button>
+                <button class="delete-event" aria-label="Delete Event"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="schedule-event game" style="top: 420px; height: 60px;">
+            <div class="event-content">
+              <div class="event-header">
+                <h4>Chơi Hangman</h4>
+                <span class="event-time">14:00 - 14:30</span>
+              </div>
+              <p class="event-description">Chơi trò chơi đoán từ</p>
+              <div class="event-actions">
+                <button class="edit-event" aria-label="Edit Event"><i class="fas fa-edit"></i></button>
+                <button class="delete-event" aria-label="Delete Event"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Activity Modal (unchanged) -->
+  <div class="modal fade" id="addActivityModal" tabindex="-1" aria-labelledby="addActivityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="addActivityModalLabel"><i class="fas fa-calendar-plus"></i> Thêm Hoạt Động Học Tập</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <form id="addActivityForm">
+            <div class="form-group">
+              <label for="activityTitle">Tiêu đề <span class="required">*</span></label>
+              <input type="text" id="activityTitle" class="form-control" placeholder="Nhập tiêu đề hoạt động" required>
+            </div>
+            <div class="form-group">
+              <label for="activityType">Loại hoạt động</label>
+              <select id="activityType" class="form-control">
+                <option value="learning">Học từ mới</option>
+                <option value="review">Ôn tập</option>
+                <option value="quiz">Làm quiz</option>
+                <option value="game">Chơi game học từ</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="activityDate">Ngày <span class="required">*</span></label>
+                <input type="date" id="activityDate" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="startTime">Thời gian bắt đầu <span class="required">*</span></label>
+                <input type="time" id="startTime" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="endTime">Thời gian kết thúc <span class="required">*</span></label>
+                <input type="time" id="endTime" class="form-control" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="activityCategory">Danh mục</label>
+              <select id="activityCategory" class="form-control">
+                <option value="normal">Bình thường</option>
+                <option value="important">Quan trọng</option>
+                <option value="urgent">Khẩn cấp</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="activityDescription">Mô tả</label>
+              <textarea id="activityDescription" class="form-control" rows="3" placeholder="Mô tả chi tiết về hoạt động"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Thông báo nhắc nhở</label>
+              <div class="option-group">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notificationToggle">
+                  <span class="slider round"></span>
+                </label>
+                <span>Bật thông báo</span>     
+              </div>
+              <select id="notificationTime" class="form-control mt-2" disabled>
+                <option value="5">5 phút trước</option>
+                <option value="15">15 phút trước</option>
+                <option value="30">30 phút trước</option>
+                <option value="60">1 giờ trước</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="button" class="btn-primary" id="saveActivityBtn">Lưu hoạt động</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+        <!-- Thêm nội dung cho tab Hồ Sơ -->
+        <section id="profile">
+          <h2>Hồ Sơ Học Viên</h2>
+          
+          <div class="profile-container">
+            <div class="profile-header">
+              <div class="profile-cover">
+                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Cover Image" class="cover-img">
+              </div>
+              <div class="profile-info">
+                <div class="profile-avatar">
+                  <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User Avatar" id="userAvatar">
+                  <div class="avatar-edit">
+                    <label for="avatarUpload"><i class="fas fa-camera"></i></label>
+                    <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                  </div>
+                </div>
+                <div class="profile-details">
+                  <h3 id="profileName">Học Viên</h3>
+                  <p class="profile-subtitle">Người học tiếng Anh</p>
+                  <div class="profile-meta">
+                    <div class="meta-item">
+                      <i class="fas fa-medal"></i>
+                      <span>Cấp độ: <strong id="userLevel">Sơ Cấp</strong></span>
+                    </div>
+                    <div class="meta-item">
+                      <i class="fas fa-calendar-check"></i>
+                      <span>Ngày tham gia: <strong id="joinDate">17/05/2025</strong></span>
+                    </div>
+                    <div class="meta-item">
+                      <i class="fas fa-trophy"></i>
+                      <span>Điểm tích lũy: <strong id="totalPoints">0</strong></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="profile-actions">
+                  <button class="btn btn-primary" id="editProfileBtn"><i class="fas fa-edit"></i> Chỉnh sửa hồ sơ</button>
+                  <button class="btn btn-outline-secondary" id="shareProfileBtn"><i class="fas fa-share-alt"></i> Chia sẻ</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="profile-content">
+              <div class="streak-card card">
+                <div class="streak-header">
+                  <h3><i class="fas fa-fire"></i> Chuỗi Streak Học Tập</h3>
+                  <span class="streak-badge" id="streakBadge">0 Ngày</span>
+                </div>
+                <div class="streak-body">
+                  <div class="streak-calendar">
+                    <div class="month-header">
+                      <button id="prevStreakMonth"><i class="fas fa-chevron-left"></i></button>
+                      <span id="streakMonth">Tháng 8, 2023</span>
+                      <button id="nextStreakMonth"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="streak-days">
+                      <div class="streak-day active"><span>1</span></div>
+                      <div class="streak-day active"><span>2</span></div>
+                      <div class="streak-day active"><span>3</span></div>
+                      <div class="streak-day active"><span>4</span></div>
+                      <div class="streak-day active"><span>5</span></div>
+                      <div class="streak-day active"><span>6</span></div>
+                      <div class="streak-day active"><span>7</span></div>
+                      <div class="streak-day active"><span>8</span></div>
+                      <div class="streak-day active"><span>9</span></div>
+                      <div class="streak-day active"><span>10</span></div>
+                      <div class="streak-day active"><span>11</span></div>
+                      <div class="streak-day active"><span>12</span></div>
+                      <div class="streak-day active"><span>13</span></div>
+                      <div class="streak-day today"><span>14</span></div>
+                      <div class="streak-day"><span>15</span></div>
+                      <div class="streak-day"><span>16</span></div>
+                      <div class="streak-day"><span>17</span></div>
+                      <div class="streak-day"><span>18</span></div>
+                      <div class="streak-day"><span>19</span></div>
+                      <div class="streak-day"><span>20</span></div>
+                      <div class="streak-day"><span>21</span></div>
+                      <div class="streak-day"><span>22</span></div>
+                      <div class="streak-day"><span>23</span></div>
+                      <div class="streak-day"><span>24</span></div>
+                      <div class="streak-day"><span>25</span></div>
+                      <div class="streak-day"><span>26</span></div>
+                      <div class="streak-day"><span>27</span></div>
+                      <div class="streak-day"><span>28</span></div>
+                      <div class="streak-day"><span>29</span></div>
+                      <div class="streak-day"><span>30</span></div>
+                      <div class="streak-day"><span>31</span></div>
+                    </div>
+                    <div class="streak-legend">
+                      <div class="legend-item"><span class="dot active"></span> Đã học</div>
+                      <div class="legend-item"><span class="dot today"></span> Hôm nay</div>
+                      <div class="legend-item"><span class="dot"></span> Chưa học</div>
+                    </div>
+                  </div>
+                  <div class="streak-stats">
+                    <div class="streak-stat">
+                      <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                      <div class="stat-info">
+                        <h4>Streak hiện tại</h4>
+                        <p>0 ngày liên tiếp</p>
+                      </div>
+                    </div>
+                    <div class="streak-stat">
+                      <div class="stat-icon"><i class="fas fa-award"></i></div>
+                      <div class="stat-info">
+                        <h4>Streak dài nhất</h4>
+                        <p>0 ngày liên tiếp</p>
+                      </div>
+                    </div>
+                    <div class="streak-stat">
+                      <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                      <div class="stat-info">
+                        <h4>Tổng ngày học</h4>
+                        <p>0 ngày</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="stats-grid">
+                <div class="achievement-card card">
+                  <h3><i class="fas fa-medal"></i> Thành Tựu</h3>
+                  <div class="achievement-list">
+                    <div class="achievement-item">
+                        <div class="achievement-icon"><i class="fas fa-trophy"></i></div>
+                        <div class="achievement-info">
+                            <h4 class="achievement-title">Người học chăm chỉ</h4>
+                          <p>Chưa hoàn thành</p>
+                          <div class="progress-mini">
+                            <div class="progress-bar" style="width: 0%"></div>
+                            <span>0/100</span>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="achievement-item">
+                        <div class="achievement-icon"><i class="fas fa-trophy"></i></div>
+                        <div class="achievement-info">
+                            <h4 class="achievement-title">Người Học Nhiệt Huyết</h4>
+                          <p>Chưa hoàn thành</p>
+                          <div class="progress-mini">
+                            <div class="progress-bar" style="width: 0%"></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                    <div class="achievement-item">
+                        <div class="achievement-icon"><i class="fas fa-trophy"></i></div>
+                        <div class="achievement-info">
+                          <h4 class="achievement-title">Sinh Viên Xuất Sắc</h4>
+                          <p>Chưa hoàn thành</p>
+                          <div class="progress-mini">
+                            <div class="progress-bar" style="width: 0%"></div>
+
+                          </div>
+                        </div>
+                      </div>
+                    <div class="achievement-item">
+                      <div class="achievement-icon"><i class="fas fa-trophy"></i></div>
+                      <div class="achievement-info">
+                        <h4 class="achievement-title">Vô Địch Từ Vựng</h4>
+                        <p>Chưa hoàn thành</p>
+                        <div class="progress-mini">
+                          <div class="progress-bar" style="width: 0%"></div>
+                          <span>0/100</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="achievement-item">
+                      <div class="achievement-icon"><i class="fas fa-globe"></i></div>
+                      <div class="achievement-info">
+                        <h4 class="achievement-title">Người Du Hành</h4>
+                        <p>Chưa hoàn thành</p>
+                        <div class="progress-mini">
+                          <div class="progress-bar" style="width: 0%"></div>
+                          <span>0</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="learning-stats-card card">
+                  <h3><i class="fas fa-chart-line"></i> Thống Kê Học Tập</h3>
+                  <div class="learning-stats">
+                    <div class="learning-stat">
+                      <div class="stat-name">Từ vựng đã học</div>
+                      <div class="stat-value">0</div>
+                      <div class="stat-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                      </div>
+                    </div>
+                    <div class="learning-stat">
+                      <div class="stat-name">Tỷ lệ trả lời đúng</div>
+                      <div class="stat-value">0%</div>
+                      <div class="stat-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                      </div>
+                    </div>
+                    <div class="learning-stat">
+                      <div class="stat-name">Thời gian học trung bình</div>
+                      <div class="stat-value">0 phút/ngày</div>
+                      <div class="stat-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                      </div>
+                    </div>
+                    <div class="learning-stat">
+                      <div class="stat-name">Hoàn thành mục tiêu hàng ngày</div>
+                      <div class="stat-value">0%</div>
+                      <div class="stat-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="preferred-topics-card card">
+                  <h3><i class="fas fa-layer-group"></i> Chủ Đề Yêu Thích</h3>
+                  <div class="topic-stats">
+                    <div class="topic-stat">
+                      <div class="topic-icon"><i class="fas fa-utensils"></i></div>
+                      <div class="topic-name" style="color: var(--text-light);">Thức Ăn</div>
+                      <div class="topic-completion">0%</div>
+                      <div class="topic-bar">
+                        <div class="progress-bar" style="width: 0%"></div>
+                      </div>
+                    </div>
+                    <div class="topic-stat">
+                      <div class="topic-icon"><i class="fas fa-plane"></i></div>
+                      <div class="topic-name" style="color: var(--text-light);">Du Lịch</div>
+                      <div class="topic-completion">0%</div>
+                      <div class="topic-bar">
+                        <div class="progress-bar" style="width: 0%"></div>
+                      </div>
+                    </div>
+                    <div class="topic-stat">
+                      <div class="topic-icon"><i class="fas fa-laptop"></i></div>
+                      <div class="topic-name" style="color: var(--text-light);">Công Nghệ</div>
+                      <div class="topic-completion">0%</div>
+                      <div class="topic-bar">
+                        <div class="progress-bar" style="width: 0%"></div>
+                      </div>
+                    </div>
+                    <div class="topic-stat">
+                      <div class="topic-icon"><i class="fas fa-paw"></i></div>
+                      <div class="topic-name" style="color: var(--text-light);">Động Vật</div>
+                      <div class="topic-completion">0%</div>
+                      <div class="topic-bar">
+                        <div class="progress-bar" style="width: 0%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="recent-activity-card card">
+                  <h3><i class="fas fa-history"></i> Hoạt Động Gần Đây</h3>
+                  <div class="activity-list">
+                    <div class="activity-item">
+                      <div class="activity-icon"><i class="fas fa-user-plus"></i></div>
+                      <div class="activity-info">
+                        <h4 style="color: var(--primary-color);">Chào mừng bạn đến với Vocab English!</h4>
+                        <p>Bắt đầu hành trình học từ vựng của bạn</p>
+                      </div>
+                      <div class="activity-time">Vừa xong</div>
+                    </div>
+                    <div class="activity-item">
+                      <div class="activity-icon"><i class="fas fa-book"></i></div>
+                      <div class="activity-info">
+                        <h4 style="color: var(--primary-color);">Khám phá các chủ đề học tập</h4>
+                        <p>Xem qua các chủ đề từ vựng phong phú</p>
+                      </div>
+                      <div class="activity-time">Vừa xong</div>
+                    </div>
+                    <div class="activity-item">
+                      <div class="activity-icon"><i class="fas fa-lightbulb"></i></div>
+                      <div class="activity-info">
+                        <h4 style="color: var(--primary-color);">Đề xuất cho người mới bắt đầu</h4>
+                        <p>Hãy thử học 5 từ vựng đầu tiên</p>
+                      </div>
+                      <div class="activity-time">Vừa xong</div>
+                    </div>
+                    <div class="activity-item">
+                      <div class="activity-icon"><i class="fas fa-trophy"></i></div>
+                      <div class="activity-info">
+                        <h4 style="color: var(--primary-color);">Thiết lập mục tiêu học tập</h4>
+                        <p>Đặt mục tiêu học tập hàng ngày của bạn</p>
+                      </div>
+                      <div class="activity-time">Vừa xong</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Edit Profile Modal -->
+          <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editProfileModalLabel">Chỉnh Sửa Hồ Sơ</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form id="editProfileForm">
+                    <div class="mb-3">
+                      <label for="editName" class="form-label">Họ và tên</label>
+                      <input type="text" class="form-control" id="editName" value="Học Viên">
+                    </div>
+                    <div class="mb-3">
+                      <label for="editEmail" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="editEmail" value="hocvien@example.com">
+                    </div>
+                    <div class="mb-3">
+                      <label for="editBio" class="form-label">Giới thiệu bản thân</label>
+                      <textarea class="form-control" id="editBio" rows="3">Tôi là người đam mê học tiếng Anh và mong muốn cải thiện vốn từ vựng của mình.</textarea>
+                    </div>
+                    <div class="mb-3">
+                      <label for="editGoal" class="form-label">Mục tiêu học tập</label>
+                      <input type="text" class="form-control" id="editGoal" value="10 từ mỗi ngày">
+                    </div>
+                    <div class="mb-3">
+                      <label for="editLevel" class="form-label">Cấp độ</label>
+                      <select class="form-select" id="editLevel">
+                        <option value="beginner" selected>Sơ Cấp</option>
+                        <option value="intermediate">Trung Cấp</option>
+                        <option value="advanced">Cao Cấp</option>
+                      </select>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                  <button type="button" class="btn btn-primary" id="saveProfileBtn">Lưu thay đổi</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal giới thiệu -->
+  <div id="aboutModal" class="modal">
+    <div id="aboutModal-content-placeholder">
+      <!-- Nội dung sẽ được tải từ aboutModal.html -->
+    </div>
+  </div>
+
+  <!-- Modal Liên Hệ -->
+  <div id="contactModal" class="modal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content modal-modern">
+        <div class="modal-header">
+          <h3 class="modal-title"><i class="fas fa-envelope"></i> Liên hệ với chúng tôi</h3>
+          <button type="button" class="btn-close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Thông tin liên hệ -->
+          <div class="contact-info-section">
+            <div class="contact-header">
+              <div class="contact-text">
+                <h3>Chúng tôi luôn sẵn sàng <span class="text-gradient">hỗ trợ bạn</span></h3>
+                <p>Hãy liên hệ với chúng tôi qua các kênh dưới đây hoặc gửi góp ý trực tiếp cho chúng tôi</p>
+              </div>
+              <div class="contact-image">
+                <img src="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Contact Support" class="img-fluid rounded">
+              </div>
+            </div>
+            
+            <div class="contact-methods">
+              <div class="contact-method-item">
+                <div class="method-icon">
+                  <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <h4>Email</h4>
+                <p>support@vocabenglish.com</p>
+                <span class="method-note">Phản hồi trong vòng 24 giờ</span>
+              </div>
+              
+              <div class="contact-method-item">
+                <div class="method-icon">
+                  <i class="fas fa-phone-alt"></i>
+                </div>
+                <h4>Hotline</h4>
+                <p>1900 123 456</p>
+                <span class="method-note">8:00 - 20:00 (Thứ 2 - Chủ nhật)</span>
+              </div>
+              
+              <div class="contact-method-item">
+                <div class="method-icon">
+                  <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h4>Văn phòng</h4>
+                <p>123 Đường ABC, Quận XYZ, TP. HCM</p>
+                <span class="method-note">8:00 - 17:00 (Thứ 2 - Thứ 6)</span>
+              </div>
+              
+              <div class="contact-method-item">
+                <div class="method-icon">
+                  <i class="fab fa-facebook-messenger"></i>
+                </div>
+                <h4>Facebook</h4>
+                <p>fb.com/vocabenglish</p>
+                <span class="method-note">Trả lời tin nhắn trong vòng 1 giờ</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Form góp ý -->
+          <div class="feedback-section">
+            <h3 class="section-title"><i class="fas fa-comment-dots"></i> Gửi góp ý cho chúng tôi</h3>
+            <form id="feedbackForm" class="feedback-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="contactName">Họ và tên <span class="required">*</span></label>
+                  <div class="input-modern">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="contactName" placeholder="Nhập họ và tên của bạn" required>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="contactEmail">Email <span class="required">*</span></label>
+                  <div class="input-modern">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="contactEmail" placeholder="Nhập email của bạn" required>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="contactPhone">Số điện thoại</label>
+                  <div class="input-modern">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" id="contactPhone" placeholder="Nhập số điện thoại của bạn">
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="contactSubject">Chủ đề <span class="required">*</span></label>
+                  <div class="input-modern">
+                    <i class="fas fa-tag"></i>
+                    <select id="contactSubject" required>
+                      <option value="">-- Chọn chủ đề --</option>
+                      <option value="account">Tài khoản & đăng nhập</option>
+                      <option value="content">Nội dung học tập</option>
+                      <option value="payment">Thanh toán & đăng ký</option>
+                      <option value="technical">Hỗ trợ kỹ thuật</option>
+                      <option value="feedback">Góp ý, phản hồi</option>
+                      <option value="feature">Đề xuất tính năng</option>
+                      <option value="partner">Hợp tác & đại lý</option>
+                      <option value="other">Vấn đề khác</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="contactMessage">Nội dung góp ý <span class="required">*</span></label>
+                <div class="input-modern">
+                  <i class="fas fa-comment"></i>
+                  <textarea id="contactMessage" placeholder="Nhập nội dung góp ý của bạn" rows="5" required></textarea>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <div class="checkbox-modern">
+                  <input type="checkbox" id="contactConsent" required>
+                  <label for="contactConsent">Tôi đồng ý cho Vocab English lưu thông tin liên lạc để phản hồi yêu cầu</label>
+                </div>
+              </div>
+              
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-paper-plane"></i> Gửi góp ý
+                </button>
+                <button type="reset" class="btn btn-outline-secondary">
+                  <i class="fas fa-redo"></i> Làm mới
+                </button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Chat với nhân viên hỗ trợ -->
+          <!-- <div class="live-chat-section">
+            <h3 class="section-title"><i class="fas fa-headset"></i> Chat với nhân viên hỗ trợ</h3>
+            <div class="chat-container">
+              <div class="chat-header-bar">
+                <div class="chat-agent">
+                  <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Support Agent" class="agent-avatar">
+                  <div class="agent-info">
+                    <h4>Hỗ trợ viên</h4>
+                    <div class="agent-status">
+                      <span class="status-dot online"></span>
+                      <span class="status-text">Đang trực tuyến</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="chat-messages" id="chatMessages">
+                <div class="chat-message system-message">
+                  <p>Kết nối với nhân viên hỗ trợ thành công. Bạn có thể bắt đầu trò chuyện.</p>
+                </div>
+                
+                <div class="chat-message support-message">
+                  <div class="message-avatar">
+                    <i class="fas fa-headset"></i>
+                  </div>
+                  <div class="message-content">
+                    <div class="message-info">
+                      <span class="message-sender">Hỗ trợ viên</span>
+                      <span class="message-time">bây giờ</span>
+                    </div>
+                    <p>Xin chào! Tôi có thể giúp gì cho bạn hôm nay?</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="chat-input-bar">
+                <input type="text" id="chatInput" placeholder="Nhập tin nhắn của bạn...">
+                <button id="sendChatBtn" class="send-btn">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </div> -->
+          
+          <!-- Kết nối mạng xã hội -->
+          <div class="social-section">
+            <h3 class="section-title"><i class="fas fa-globe"></i> Kết nối với chúng tôi</h3>
+            <div class="social-links">
+              <a href="#" class="social-link facebook">
+                <i class="fab fa-facebook-f"></i>
+                <span>Facebook</span>
+              </a>
+              <a href="#" class="social-link youtube">
+                <i class="fab fa-youtube"></i>
+                <span>YouTube</span>
+              </a>
+              <a href="#" class="social-link instagram">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram</span>
+              </a>
+              <a href="#" class="social-link tiktok">
+                <i class="fab fa-tiktok"></i>
+                <span>TikTok</span>
+              </a>
+              <a href="#" class="social-link linkedin">
+                <i class="fab fa-linkedin-in"></i>
+                <span>LinkedIn</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container for notifications -->
+  <div class="toast-container"></div>
+
+  <script>
+    // Initialize the application when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Fallback initialization
+      if (typeof initializeApp === 'function') {
+        initializeApp();
+      }
+    });
+  </script>
+
+  <!-- Add this script before the end of the body tag -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize animations for all elements with animate-on-scroll class
+      const animatedElements = document.querySelectorAll('.animate-on-scroll');
+      
+      // Function to check if element is in viewport
+      function isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        return (
+          rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.bottom >= 0
+        );
+      }
+      
+      // Check elements on scroll
+      function checkElements() {
+        animatedElements.forEach(element => {
+          if (isInViewport(element)) {
+            const delay = element.getAttribute('data-delay') || 0;
+            element.style.animationDelay = delay + 'ms';
+            element.classList.add('animated');
+          }
+        });
+      }
+      
+      // Run on initial load
+      checkElements();
+      
+      // Run on scroll
+      window.addEventListener('scroll', checkElements);
+      
+      // FAQ Toggle
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', () => {
+          item.classList.toggle('active');
+        });
+      });
+      
+      // Live chat functionality
+      const chatInput = document.getElementById('chatInput');
+      const sendChatBtn = document.getElementById('sendChatBtn');
+      const chatMessages = document.getElementById('chatMessages');
+      
+      function sendMessage() {
+        if (chatInput.value.trim() === '') return;
+        
+        // Create user message element
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'chat-message user-message';
+        
+        messageDiv.innerHTML = `
+          <div class="message-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="message-content">
+            <div class="message-info">
+              <span class="message-sender">Bạn</span>
+              <span class="message-time">bây giờ</span>
+            </div>
+            <p>${chatInput.value}</p>
+          </div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Clear input
+        const userMessage = chatInput.value;
+        chatInput.value = '';
+        
+        // Simulate typing indicator
+        setTimeout(() => {
+          const typingDiv = document.createElement('div');
+          typingDiv.className = 'chat-message support-message typing-indicator';
+          typingDiv.innerHTML = `
+            <div class="message-avatar">
+              <i class="fas fa-headset"></i>
+            </div>
+            <div class="message-content">
+              <div class="typing-dots">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          `;
+          chatMessages.appendChild(typingDiv);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          
+          // Simulate response after 1.5 seconds
+          setTimeout(() => {
+            chatMessages.removeChild(typingDiv);
+            
+            // Automated response
+            const responseDiv = document.createElement('div');
+            responseDiv.className = 'chat-message support-message';
+            
+            let responseText = 'Cảm ơn bạn đã liên hệ. Chúng tôi đã ghi nhận và sẽ phản hồi sớm!';
+            
+            // Simple auto-responses based on keywords
+            if (userMessage.toLowerCase().includes('giá') || userMessage.toLowerCase().includes('price')) {
+              responseText = 'Vocab English hiện có các gói: Gói Cơ bản (Miễn phí), Gói Premium (199k/năm) và Gói VIP (299k/năm). Bạn có thể xem chi tiết trong mục Giá & Đăng ký.';
+            } else if (userMessage.toLowerCase().includes('free') || userMessage.toLowerCase().includes('miễn phí')) {
+              responseText = 'Gói Cơ bản của Vocab English hoàn toàn miễn phí với đầy đủ các tính năng cơ bản và 500 từ vựng phổ biến.';
+            } else if (userMessage.toLowerCase().includes('android') || userMessage.toLowerCase().includes('ios') || userMessage.toLowerCase().includes('app')) {
+              responseText = 'Vocab English có các ứng dụng dành cho iOS và Android. Bạn có thể tải từ App Store hoặc Google Play Store.';
+            }
+            
+            responseDiv.innerHTML = `
+              <div class="message-avatar">
+                <i class="fas fa-headset"></i>
+              </div>
+              <div class="message-content">
+                <div class="message-info">
+                  <span class="message-sender">Hỗ trợ viên</span>
+                  <span class="message-time">bây giờ</span>
+                </div>
+                <p>${responseText}</p>
+              </div>
+            `;
+            
+            chatMessages.appendChild(responseDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          }, 1500);
+        }, 500);
+      }
+      
+      // Send message on button click
+      if (sendChatBtn) {
+        sendChatBtn.addEventListener('click', sendMessage);
+      }
+      
+      // Send message on Enter key
+      if (chatInput) {
+        chatInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            sendMessage();
+          }
+        });
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="pexelsService.js"></script>
+
+  <script src="script.js"></script>
+
+  <script src="ModalAbout/loaderAbouModal.js"></script>
+
+  <script src="ModalAbout/aboutModal.js"></script>
+
+  <script src="FlashCards/loaderFlashCards.js"></script>
+
+  <script src="FlashCards/flashCards.js"></script>
+  
+  <script src="Game/loaderGames.js"></script>
+  
+  <script src="Game/games.js"></script> 
+</body>
+</html>

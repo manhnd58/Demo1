@@ -1,0 +1,332 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tìm Từ - Vocab English</title>
+  <link rel="stylesheet" href="games.css">
+  <style>
+    /* Bổ sung CSS cho Word Search */
+    .word-search-container {
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .game-top-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .game-info {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #f8f9fa;
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
+    
+    .info-label {
+      font-size: 0.85rem;
+      color: #6c757d;
+      margin-bottom: 5px;
+    }
+    
+    .info-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    
+    .game-main-section {
+      display: flex;
+      gap: 30px;
+      margin-top: 30px;
+    }
+    
+    .word-search-grid {
+      flex: 1;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 5px;
+      margin: 0 auto;
+    }
+    
+    .word-search-cell {
+      width: 35px;
+      height: 35px;
+      border-radius: 4px;
+      background-color: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+    
+    .word-search-cell:hover {
+      background-color: #e9ecef;
+    }
+    
+    .word-search-cell.selected {
+      background-color: var(--primary-color);
+      color: white;
+      animation: pulse 1s infinite;
+    }
+    
+    .word-search-cell.found-word {
+      background-color: var(--success-color);
+      color: white;
+    }
+    
+    .word-list-section {
+      width: 250px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .word-list-title {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: var(--primary-color);
+      text-align: center;
+    }
+    
+    .words-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    .word-item {
+      padding: 8px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .word-item.found {
+      background-color: var(--success-color);
+      color: white;
+      text-decoration: line-through;
+    }
+    
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(var(--primary-color-rgb), 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(var(--primary-color-rgb), 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(var(--primary-color-rgb), 0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="game-header">
+      <h2>Trò Chơi Tìm Từ</h2>
+    </div>
+
+    <div class="game-instructions">
+      <h4>Hướng dẫn - Tìm Từ</h4>
+      <ol>
+        <li>Tìm các từ ẩn trong bảng chữ cái</li>
+        <li>Từ có thể nằm ngang, dọc hoặc chéo</li>
+        <li>Nhấp và kéo để chọn từ</li>
+      </ol>
+    </div>
+
+    <div class="word-search-container">
+      <div class="game-top-section">
+        <div class="game-info">
+          <div class="info-item">
+            <div class="info-label">Thời gian</div>
+            <div class="info-value" id="searchTimer">05:00</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Điểm</div>
+            <div class="info-value" id="searchScore">0</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Đã tìm</div>
+            <div class="info-value"><span id="wordsFoundCount">0</span>/<span id="totalWords">10</span></div>
+          </div>
+        </div>
+        
+        <div class="game-difficulty">
+          <select id="difficultySelect" class="form-control">
+            <option value="easy">Dễ (8x8)</option>
+            <option value="medium" selected>Trung bình (10x10)</option>
+            <option value="hard">Khó (12x12)</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="game-main-section">
+        <div class="word-search-grid">
+          <div class="grid-container">
+            <!-- 10x10 grid -->
+            <div class="word-search-cell">A</div>
+            <div class="word-search-cell">P</div>
+            <div class="word-search-cell">P</div>
+            <div class="word-search-cell">L</div>
+            <div class="word-search-cell">E</div>
+            <div class="word-search-cell">F</div>
+            <div class="word-search-cell">G</div>
+            <div class="word-search-cell">H</div>
+            <div class="word-search-cell">I</div>
+            <div class="word-search-cell">J</div>
+            
+            <div class="word-search-cell">K</div>
+            <div class="word-search-cell">L</div>
+            <div class="word-search-cell">B</div>
+            <div class="word-search-cell">O</div>
+            <div class="word-search-cell">O</div>
+            <div class="word-search-cell">K</div>
+            <div class="word-search-cell">T</div>
+            <div class="word-search-cell">U</div>
+            <div class="word-search-cell">V</div>
+            <div class="word-search-cell">W</div>
+            
+            <div class="word-search-cell">X</div>
+            <div class="word-search-cell">Y</div>
+            <div class="word-search-cell">Z</div>
+            <div class="word-search-cell">C</div>
+            <div class="word-search-cell">A</div>
+            <div class="word-search-cell">T</div>
+            <div class="word-search-cell">D</div>
+            <div class="word-search-cell">E</div>
+            <div class="word-search-cell">F</div>
+            <div class="word-search-cell">G</div>
+            
+            <div class="word-search-cell">H</div>
+            <div class="word-search-cell">I</div>
+            <div class="word-search-cell">J</div>
+            <div class="word-search-cell">K</div>
+            <div class="word-search-cell">L</div>
+            <div class="word-search-cell">M</div>
+            <div class="word-search-cell">N</div>
+            <div class="word-search-cell">O</div>
+            <div class="word-search-cell">P</div>
+            <div class="word-search-cell">Q</div>
+            
+            <div class="word-search-cell">R</div>
+            <div class="word-search-cell">S</div>
+            <div class="word-search-cell">T</div>
+            <div class="word-search-cell">U</div>
+            <div class="word-search-cell">D</div>
+            <div class="word-search-cell">O</div>
+            <div class="word-search-cell">G</div>
+            <div class="word-search-cell">X</div>
+            <div class="word-search-cell">Y</div>
+            <div class="word-search-cell">Z</div>
+            
+            <div class="word-search-cell">A</div>
+            <div class="word-search-cell">B</div>
+            <div class="word-search-cell">C</div>
+            <div class="word-search-cell selected">D</div>
+            <div class="word-search-cell selected">E</div>
+            <div class="word-search-cell selected">S</div>
+            <div class="word-search-cell selected">K</div>
+            <div class="word-search-cell">H</div>
+            <div class="word-search-cell">I</div>
+            <div class="word-search-cell">J</div>
+            
+            <div class="word-search-cell">K</div>
+            <div class="word-search-cell">L</div>
+            <div class="word-search-cell">M</div>
+            <div class="word-search-cell">N</div>
+            <div class="word-search-cell">O</div>
+            <div class="word-search-cell">P</div>
+            <div class="word-search-cell">Q</div>
+            <div class="word-search-cell">R</div>
+            <div class="word-search-cell">S</div>
+            <div class="word-search-cell">T</div>
+            
+            <div class="word-search-cell">U</div>
+            <div class="word-search-cell">V</div>
+            <div class="word-search-cell found-word">W</div>
+            <div class="word-search-cell found-word">A</div>
+            <div class="word-search-cell found-word">T</div>
+            <div class="word-search-cell found-word">E</div>
+            <div class="word-search-cell found-word">R</div>
+            <div class="word-search-cell">Y</div>
+            <div class="word-search-cell">Z</div>
+            <div class="word-search-cell">A</div>
+            
+            <div class="word-search-cell">B</div>
+            <div class="word-search-cell">C</div>
+            <div class="word-search-cell">D</div>
+            <div class="word-search-cell">E</div>
+            <div class="word-search-cell">F</div>
+            <div class="word-search-cell">G</div>
+            <div class="word-search-cell">H</div>
+            <div class="word-search-cell">I</div>
+            <div class="word-search-cell">J</div>
+            <div class="word-search-cell">K</div>
+            
+            <div class="word-search-cell">L</div>
+            <div class="word-search-cell">M</div>
+            <div class="word-search-cell">N</div>
+            <div class="word-search-cell">O</div>
+            <div class="word-search-cell">P</div>
+            <div class="word-search-cell">Q</div>
+            <div class="word-search-cell">R</div>
+            <div class="word-search-cell">S</div>
+            <div class="word-search-cell">T</div>
+            <div class="word-search-cell">U</div>
+          </div>
+        </div>
+        
+        <div class="word-list-section">
+          <div class="word-list-title">Danh sách từ cần tìm:</div>
+          <div class="words-grid" id="wordList">
+            <div class="word-item">APPLE</div>
+            <div class="word-item">BOOK</div>
+            <div class="word-item">CAT</div>
+            <div class="word-item found">WATER</div>
+            <div class="word-item found">DESK</div>
+            <div class="word-item">DOG</div>
+            <div class="word-item">HOUSE</div>
+            <div class="word-item">SCHOOL</div>
+            <div class="word-item">PEN</div>
+            <div class="word-item">PHONE</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="game-controls">
+        <button class="btn btn-primary" id="newSearchGame">Trò chơi mới</button>
+        <button class="btn btn-secondary" id="showHint">Gợi ý</button>
+        <button class="btn btn-danger" id="endSearchGame">Kết thúc</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+-->

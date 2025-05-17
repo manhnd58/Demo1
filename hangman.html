@@ -1,0 +1,164 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hangman - Vocab English</title>
+  <link rel="stylesheet" href="games.css">
+  <style>
+    /* Bổ sung CSS cho Hangman */
+    .hangman-svg {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    
+    .hangman-parts {
+      stroke: #2c3e50;
+      stroke-width: 4;
+      fill: none;
+    }
+    
+    .hangman-stand {
+      stroke: #624a2e;
+      stroke-width: 5;
+    }
+    
+    .hangman-head {
+      fill: none;
+      stroke-width: 4;
+    }
+
+    .hangman-stat-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 20px;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 15px;
+    }
+
+    .hangman-stat {
+      text-align: center;
+      padding: 0 15px;
+    }
+
+    .hangman-stat h5 {
+      margin: 0 0 5px;
+      color: #6c757d;
+      font-size: 0.9em;
+    }
+
+    .hangman-stat span {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .hangman-word-container {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="game-header">
+      <h2>Trò Chơi Hangman</h2>
+    </div>
+
+    <div class="game-instructions">
+      <h4>Hướng dẫn - Hangman</h4>
+      <ol>
+        <li>Đoán từ bằng cách chọn các chữ cái</li>
+        <li>Mỗi lần đoán sai, hình người sẽ được vẽ thêm</li>
+        <li>Đoán đúng từ trước khi hình người hoàn chỉnh</li>
+      </ol>
+    </div>
+
+    <div class="hangman-stat-container">
+      <div class="hangman-stat">
+        <h5>Lượt còn lại</h5>
+        <span id="attemptsLeft">6</span>
+      </div>
+      <div class="hangman-stat">
+        <h5>Số từ đã đoán</h5>
+        <span id="wordsGuessed">0</span>
+      </div>
+      <div class="hangman-stat">
+        <h5>Điểm</h5>
+        <span id="hangmanScore">0</span>
+      </div>
+    </div>
+
+    <div class="hangman-container">
+      <div class="hangman-drawing" id="hangmanDrawing">
+        <svg width="200" height="250" id="hangmanSvg" class="hangman-svg">
+          <-- Giá treo -->
+          <!-- <line x1="40" y1="240" x2="160" y2="240" class="hangman-stand" />
+          <line x1="70" y1="240" x2="70" y2="40" class="hangman-stand" />
+          <line x1="70" y1="40" x2="130" y2="40" class="hangman-stand" />
+          <line x1="130" y1="40" x2="130" y2="70" class="hangman-stand" />
+           -->
+          <!-- Các bộ phận của người (ban đầu ẩn) -->
+          <!-- <circle cx="130" cy="90" r="20" class="hangman-parts hangman-head" />
+          <line x1="130" y1="110" x2="130" y2="170" class="hangman-parts" />
+          <line x1="130" y1="130" x2="100" y2="150" class="hangman-parts" />
+          <line x1="130" y1="130" x2="160" y2="150" class="hangman-parts" />
+          <line x1="130" y1="170" x2="110" y2="210" class="hangman-parts" />
+          <line x1="130" y1="170" x2="150" y2="210" class="hangman-parts" />
+        </svg>
+      </div>
+      
+      <div class="hangman-word-container">
+        <div class="hangman-category">Chủ đề: <span id="wordCategory">Động vật</span></div>
+        <div class="hangman-word" id="hangmanWord">
+          <div class="hangman-letter">_</div>
+          <div class="hangman-letter">_</div>
+          <div class="hangman-letter">_</div>
+          <div class="hangman-letter">_</div>
+          <div class="hangman-letter">_</div>
+        </div>
+      </div>
+      
+      <div class="hangman-keyboard" id="hangmanKeyboard">
+        <div class="keyboard-key">A</div>
+        <div class="keyboard-key">B</div>
+        <div class="keyboard-key">C</div>
+        <div class="keyboard-key">D</div>
+        <div class="keyboard-key">E</div>
+        <div class="keyboard-key">F</div>
+        <div class="keyboard-key">G</div>
+        <div class="keyboard-key">H</div>
+        <div class="keyboard-key">I</div>
+        <div class="keyboard-key">J</div>
+        <div class="keyboard-key">K</div>
+        <div class="keyboard-key">L</div>
+        <div class="keyboard-key">M</div>
+        <div class="keyboard-key">N</div>
+        <div class="keyboard-key">O</div>
+        <div class="keyboard-key">P</div>
+        <div class="keyboard-key">Q</div>
+        <div class="keyboard-key">R</div>
+        <div class="keyboard-key">S</div>
+        <div class="keyboard-key">T</div>
+        <div class="keyboard-key">U</div>
+        <div class="keyboard-key">V</div>
+        <div class="keyboard-key">W</div>
+        <div class="keyboard-key">X</div>
+        <div class="keyboard-key">Y</div>
+        <div class="keyboard-key">Z</div>
+      </div>
+      
+      <div class="game-controls">
+        <button class="btn btn-primary" id="newHangmanGame">Trò chơi mới</button>
+        <button class="btn btn-secondary" id="showHint">Gợi ý</button>
+        <button class="btn btn-danger" id="endHangmanGame">Kết thúc</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html> 
+ -->

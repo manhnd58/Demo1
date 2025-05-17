@@ -1,0 +1,94 @@
+<!-- Flashcards -->
+<section id="flashcards">
+  <h2>Học với Flashcards</h2>
+  <div class="flashcard-toolbar">
+    <div class="controls">
+      <button id="prevCard" class="btn btn-light"><i class="fas fa-arrow-left"></i></button>
+      <span id="cardCounter">1/30</span>
+      <button id="nextCard" class="btn btn-light"><i class="fas fa-arrow-right"></i></button>
+    </div>
+    <div class="timer-container">
+      <div class="timer-display">
+        <i class="fas fa-stopwatch"></i>
+        <span id="timerDisplay">00:00</span>
+      </div>
+      <div class="timer-settings">
+        <select id="timerDuration" class="form-select">
+          <option value="0">Không hẹn giờ</option>
+          <option value="5">5 giây/thẻ</option>
+          <option value="10">10 giây/thẻ</option>
+          <option value="15">15 giây/thẻ</option>
+          <option value="30">30 giây/thẻ</option>
+        </select>
+        <button id="toggleTimer" class="btn btn-sm btn-primary"><i class="fas fa-play"></i></button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="flashcard-container">
+    <div class="flashcard" id="currentCard">
+      <div class="front">
+        <div class="word-header">
+          <p class="word">Word</p>
+          <div class="word-controls">
+            <span class="phonetic">/wɜːrd/</span>
+            <button class="pronounce btn btn-sm btn-light"><i class="fas fa-volume-up"></i></button>
+          </div>
+        </div>
+        <div class="word-image">
+          <div class="image-placeholder">
+            <i class="fas fa-image"></i>
+          </div>
+          <img src="https://images.unsplash.com/photo-1591382696684-38c427c7547a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Word illustration" class="img-fluid loading">
+          <div class="image-upload-controls">
+            <label for="imageUpload" class="upload-btn" title="Tải ảnh lên">
+              <i class="fas fa-upload"></i>
+            </label>
+            <button class="delete-img-btn" id="deleteImage" title="Xóa ảnh tùy chỉnh">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+            <input type="file" id="imageUpload" accept="image/*" style="display:none;">
+          </div>
+        </div>
+      </div>
+      <div class="back">
+        <p class="meaning">Meaning</p>
+        <p class="example">Example sentence</p>
+        <div class="word-info">
+          <div class="word-type">Loại từ: <span>Danh từ</span></div>
+          <div class="word-category">Chủ đề: <span>Cơ bản</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card-actions">
+    <button id="markAsKnown" class="btn btn-success"><i class="fas fa-check"></i> Đã Biết</button>
+    <button id="flipCard" class="btn btn-primary"><i class="fas fa-sync"></i> Lật Thẻ</button>
+    <button id="markForReview" class="btn btn-warning"><i class="fas fa-bookmark"></i> Ôn Tập Lại</button>
+  </div>
+  
+  <div class="additional-options">
+    <div class="option-group">
+      <label for="autoPlay">Tự động phát âm:</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="autoPlay">
+        <span class="slider round"></span>
+      </div>
+    </div>
+    <div class="option-group">
+      <label for="autoFlip">Tự động lật thẻ:</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="autoFlip">
+        <span class="slider round"></span>
+      </div>
+    </div>
+    <div class="option-group">
+      <label for="showImage">Hiển thị hình ảnh:</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="showImage" checked>
+        <span class="slider round"></span>
+      </div>
+    </div>
+  </div>
+</section>

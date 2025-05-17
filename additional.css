@@ -1,0 +1,534 @@
+/* Additional styles for Vocab English */
+
+/* Avatar loading styles */
+.profile-avatar {
+  position: relative;
+}
+
+.profile-avatar img.loading {
+  opacity: 0.6;
+}
+
+.profile-avatar::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(79, 70, 229, 0.2);
+  border-top: 3px solid #4f46e5;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: avatar-spin 1s linear infinite;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.profile-avatar img.loading + .avatar-edit::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes avatar-spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Error message styles */
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  background-color: #fff3f3;
+  border-radius: 8px;
+  border: 1px solid #ffcdd2;
+  margin: 1rem 0;
+}
+
+.error-message i {
+  font-size: 3rem;
+  color: #f44336;
+  margin-bottom: 1rem;
+}
+
+.error-message p {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.error-message .error-details {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 1rem;
+}
+
+.error-message button {
+  margin-top: 1rem;
+}
+
+/* Loading spinner for flashcards */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.loading-spinner .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(79, 70, 229, 0.2);
+  border-top: 4px solid #4f46e5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.loading-spinner p {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Modal styles - Important! */
+.modal-backdrop {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  z-index: 1040 !important;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.show {
+  opacity: 1;
+}
+
+.modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: none;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 1050 !important;
+  overflow: auto !important;
+}
+
+.modal.show {
+  display: flex !important;
+}
+
+.modal-dialog {
+  position: relative !important;
+  width: auto !important;
+  max-width: 800px !important;
+  margin: 1.75rem auto !important;
+  pointer-events: auto !important;
+  transition: transform 0.3s ease !important;
+  transform: translateY(0) !important;
+  z-index: 1051 !important;
+}
+
+.modal-content {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  background-color: #fff !important;
+  background-clip: padding-box !important;
+  border-radius: 12px !important;
+  outline: 0 !important;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3) !important;
+  z-index: 1052 !important;
+}
+
+.modal-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 1rem !important;
+  border-bottom: 1px solid #dee2e6 !important;
+  background: linear-gradient(135deg, #4f46e5, #06b6d4) !important;
+  color: white !important;
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+}
+
+.modal-body {
+  position: relative !important;
+  flex: 1 1 auto !important;
+  padding: 1.5rem !important;
+  max-height: 70vh !important;
+  overflow-y: auto !important;
+}
+
+.modal-header .btn-close {
+  background: transparent !important;
+  border: none !important;
+  font-size: 1.5rem !important;
+  color: white !important;
+  cursor: pointer !important;
+  padding: 0.5rem !important;
+  margin: -0.5rem !important;
+}
+
+/* Animation for modal */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal.show .modal-dialog {
+  animation: modalFadeIn 0.3s forwards;
+}
+
+/* Make sure modal is on top of everything */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Fix modal content to ensure it displays properly */
+#aboutModal.modal {
+  z-index: 1100 !important;
+}
+
+#aboutModal .modal-dialog {
+  z-index: 1101 !important;
+  width: 100% !important;
+  max-width: 800px !important;
+  margin: 30px auto !important;
+}
+
+#aboutModal .modal-content {
+  z-index: 1102 !important;
+  width: 100% !important;
+  max-width: 800px !important;
+}
+
+#aboutModal .modal-body {
+  padding: 1.5rem !important;
+  overflow-y: auto !important;
+}
+
+/* Dark Mode Styles for Games Section */
+.dark-mode .games-section {
+  /* background-color:  #2a2a2a  !important; */
+  color: #e0e0e0 !important;
+  border-radius: 12px !important;
+}
+
+.dark-mode .section-header h2 {
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .section-subtitle {
+  color: #b0b0b0 !important;
+}
+
+.dark-mode .games-container {
+  background-color: transparent !important;
+}
+
+.dark-mode .game-card {
+  background-color: #2a2a2a !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark-mode .card-body {
+  background-color: #1e293b !important;
+}
+
+.dark-mode .game-info h3 {
+  color: var(--primary-color) !important;
+}
+
+.dark-mode .game-info p {
+  color: #b0b0b0 !important;
+}
+
+/* Phần lợi ích của games - điều chỉnh style */
+.dark-mode .games-benefits {
+  background-color: #1e293b !important;
+  color: #e0e0e0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark-mode .games-benefits h3 {
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .benefit-item {
+  background-color: #1e293b !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark-mode .benefit-info h4 {
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .benefit-info p {
+  color: #b0b0b0 !important;
+}
+
+.dark-mode .benefit-icon {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+.dark-mode .benefits-container {
+  background-color: transparent !important;
+}
+
+/* Game difficulty dots */
+.dark-mode .difficulty-dot {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.dark-mode .difficulty-dot.active {
+  background-color: var(--primary-color) !important;
+}
+
+/* Play button styling */
+.dark-mode .play-btn {
+  background-color: #3a3a3a !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #4a4a4a !important;
+}
+
+.dark-mode .play-btn:hover {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+/* Games container và content placeholder */
+.dark-mode #games-content-placeholder {
+  background-color: #1e293b !important;
+  color: #e0e0e0 !important;
+  border-radius: 12px !important;
+}
+
+/* Game modal dark mode */
+.dark-mode #gameModal .modal-content {
+  background-color: #2a2a2a !important;
+  color: #e0e0e0 !important;
+}
+
+.dark-mode #gameModal .modal-header {
+  border-bottom: 1px solid #3a3a3a !important;
+}
+
+.dark-mode #gameModal .modal-footer {
+  border-top: 1px solid #3a3a3a !important;
+}
+
+.dark-mode #gameModal .btn-close {
+  color: #e0e0e0 !important;
+  background-color: #3a3a3a !important;
+}
+
+/* Dark Mode Styles for About and Contact Modals */
+.dark-mode .modal-modern {
+  background-color: #1e293b !important;
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .modal-modern .modal-body {
+  background-color: #1e293b !important;
+  color: #e0e0e0 !important;
+}
+
+/* About Modal Dark Mode */
+.dark-mode .welcome-text,
+.dark-mode .story-content p,
+.dark-mode .team-description,
+.dark-mode .methodology-text p,
+.dark-mode .contact-link-content p {
+  color: #b0b0b0 !important;
+}
+
+.dark-mode .welcome-stat {
+  background-color: #1e293b !important;
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .features-section,
+.dark-mode .methodology-section,
+.dark-mode .story-section,
+.dark-mode .goals-section,
+.dark-mode .team-section,
+.dark-mode .testimonials-section,
+.dark-mode .contact-link-section {
+  background-color: #1e293b !important;
+}
+
+.dark-mode .feature-box,
+.dark-mode .vision-box, 
+.dark-mode .mission-box,
+.dark-mode .team-member,
+.dark-mode .goal-item,
+.dark-mode .testimonial-item {
+  background: linear-gradient(135deg, #4f46e5, #06b6d4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark-mode .feature-box h4,
+.dark-mode .tool-info h4,
+.dark-mode .goal-info h4,
+.dark-mode .vision-box h4, 
+.dark-mode .mission-box h4,
+.dark-mode .team-member h4,
+.dark-mode .methodology-list li strong {
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .feature-box p,
+.dark-mode .tool-info p,
+.dark-mode .goal-info p,
+.dark-mode .vision-box p, 
+.dark-mode .mission-box p,
+.dark-mode .member-desc,
+.dark-mode .member-role,
+.dark-mode .methodology-list li,
+.dark-mode .testimonial-author {
+  color: #b0b0b0 !important;
+}
+
+/* Contact Modal Dark Mode */
+.dark-mode .contact-text h3,
+.dark-mode .contact-method-item h4 {
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .contact-text p,
+.dark-mode .contact-method-item p,
+.dark-mode .method-note {
+  color: #b0b0b0 !important;
+}
+
+.dark-mode .contact-method-item {
+  background-color: #1e293b !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark-mode .feedback-section,
+.dark-mode .social-section,
+.dark-mode .live-chat-section {
+  background-color: #1e293b !important;
+  padding: 1.5rem !important;
+  border-radius: 12px !important;
+}
+
+.dark-mode .input-modern {
+  background-color: #1e293b !important;
+  border: 1px solid #444 !important;
+}
+
+.dark-mode .input-modern input,
+.dark-mode .input-modern select,
+.dark-mode .input-modern textarea {
+  background-color: #1e293b !important;
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .form-group label {
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .checkbox-modern label {
+  color: #b0b0b0 !important;
+}
+
+.dark-mode .social-link {
+  background-color: #1e293b !important;
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .social-link:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+  color: white !important;
+}
+
+.dark-mode .social-link.facebook:hover {
+  background-color: #3b5998 !important;
+}
+
+.dark-mode .social-link.youtube:hover {
+  background-color: #ff0000 !important;
+}
+
+.dark-mode .social-link.instagram:hover {
+  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D, #F56040, #F77737, #FCAF45, #FFDC80) !important;
+}
+
+.dark-mode .social-link.tiktok:hover {
+  background: linear-gradient(45deg, #000000, #EE1D52, #69C9D0) !important;
+}
+
+.dark-mode .social-link.linkedin:hover {
+  background-color: #0077B5 !important;
+}
+
+.dark-mode .chat-container {
+  background-color: #1e293b !important;
+  border: 1px solid #444 !important;
+}
+
+.dark-mode .chat-header-bar {
+  background-color: #1e293b !important;
+}
+
+.dark-mode .chat-messages {
+  background-color: #1e293b !important;
+}
+
+.dark-mode .system-message {
+  background-color: #1e293b !important;
+  color: #b0b0b0 !important;
+}
+
+.dark-mode .support-message .message-content {
+  background-color: #1e293b !important;
+}
+
+.dark-mode .chat-input-bar {
+  background-color: #1e293b !important;
+  border-top: 1px solid #444 !important;
+}
+
+.dark-mode .chat-input-bar input {
+  background-color: #1e293b !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #444 !important;
+}

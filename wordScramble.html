@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sắp Xếp Chữ - Vocab English</title>
+  <link rel="stylesheet" href="games.css">
+</head>
+<body>
+  <div class="game-container">
+    <div class="game-header">
+      <h2>Trò Chơi Sắp Xếp Chữ</h2>
+    </div>
+
+    <div class="game-instructions">
+      <h4>Hướng dẫn - Sắp Xếp Chữ</h4>
+      <ol>
+        <li>Sắp xếp các chữ cái thành từ có nghĩa</li>
+        <li>Nhấp vào các chữ cái để tạo từ</li>
+        <li>Hoàn thành càng nhiều từ càng tốt trước khi hết thời gian</li>
+      </ol>
+    </div>
+
+    <div class="scramble-container">
+      <div class="game-timer" id="scrambleTimer">01:30</div>
+      
+      <div class="game-score">Điểm: <span id="scrambleScore">0</span></div>
+      
+      <div class="scramble-word" id="scrambledWord">CEPPAL</div>
+      
+      <div class="letter-tiles" id="letterTiles">
+        <div class="letter-tile">A</div>
+        <div class="letter-tile">P</div>
+        <div class="letter-tile">P</div>
+        <div class="letter-tile">L</div>
+        <div class="letter-tile">E</div>
+        <div class="letter-tile">C</div>
+      </div>
+      
+      <div class="form-group scramble-input">
+        <input type="text" class="form-control" id="scrambleAnswer" placeholder="Nhấp vào chữ cái để tạo từ" readonly>
+      </div>
+      
+      <div class="hint-section">
+        <span class="hint-label">Gợi ý: </span>
+        <span class="hint-text" id="wordHint">Một loại trái cây màu đỏ hoặc xanh</span>
+      </div>
+      
+      <div class="words-completed">
+        <h4>Các từ đã hoàn thành:</h4>
+        <div class="completed-words" id="completedWords">
+          <!-- Danh sách các từ đã hoàn thành sẽ hiển thị ở đây -->
+        </div>
+      </div>
+      
+      <div class="game-controls">
+        <button class="btn btn-secondary" id="clearBtn">Xóa</button>
+        <button class="btn btn-primary" id="submitBtn">Kiểm tra</button>
+        <button class="btn btn-warning" id="skipBtn">Bỏ qua</button>
+        <button class="btn btn-danger" id="endScrambleGame">Kết thúc</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
